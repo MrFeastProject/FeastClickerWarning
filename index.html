@@ -2,51 +2,57 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Обновление игры · Feast Executor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Обновление игры</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1a1a'/%3E%3Cpath d='M50 20 L70 40 L65 45 L55 35 L55 80 L45 80 L45 35 L35 45 L30 40 L50 20Z' fill='%23e53935'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #222222;
-            --bg-card: #2a2a2a;
-            --bg-card-hover: #333333;
+            --bg-primary: #0d0d0d;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #242424;
             --red: #e53935;
             --red-dark: #b71c1c;
-            --red-glow: rgba(229, 57, 53, 0.35);
-            --red-glow-strong: rgba(229, 57, 53, 0.6);
+            --red-glow: rgba(229, 57, 53, 0.25);
+            --red-glow-strong: rgba(229, 57, 53, 0.45);
             --text: #f0f0f0;
-            --text-secondary: #bbbbbb;
-            --text-muted: #888888;
-            --border: rgba(255, 255, 255, 0.08);
-            --border-hover: rgba(229, 57, 53, 0.35);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-lg: 24px;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --text-secondary: #a0a0a0;
+            --text-muted: #6a6a6a;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-red: rgba(229, 57, 53, 0.2);
+            --radius: 14px;
+            --radius-lg: 20px;
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text);
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px;
-            margin: 0;
-            line-height: 1.6;
-            position: relative;
+            padding: 16px;
+            padding-bottom: calc(16px + var(--safe-bottom));
+            min-height: 100vh;
+            min-height: 100dvh;
         }
 
         /* ===== Фоновый слой ===== */
@@ -66,118 +72,141 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 64px 64px;
-            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 25%, transparent 70%);
         }
 
         .bg-glow {
             position: absolute;
             border-radius: 50%;
-            filter: blur(140px);
-            opacity: 0.08;
-            width: 600px;
-            height: 600px;
+            filter: blur(120px);
+            opacity: 0.06;
+            width: 500px;
+            height: 500px;
             background: radial-gradient(circle, #e53935, transparent 70%);
             top: -200px;
-            right: -150px;
-            animation: floatGlow 25s ease-in-out infinite;
+            right: -120px;
+            animation: floatGlow 20s ease-in-out infinite;
         }
 
         .bg-glow-2 {
             position: absolute;
             border-radius: 50%;
-            filter: blur(140px);
-            opacity: 0.05;
-            width: 500px;
-            height: 500px;
+            filter: blur(120px);
+            opacity: 0.04;
+            width: 400px;
+            height: 400px;
             background: radial-gradient(circle, #e53935, transparent 70%);
-            bottom: -150px;
-            left: -100px;
-            animation: floatGlow 30s ease-in-out infinite reverse;
+            bottom: -100px;
+            left: -80px;
+            animation: floatGlow 28s ease-in-out infinite reverse;
         }
 
         @keyframes floatGlow {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -60px) scale(1.1); }
-            50% { transform: translate(-20px, 40px) scale(0.9); }
-            75% { transform: translate(-60px, -20px) scale(1.05); }
+            25% { transform: translate(30px, -40px) scale(1.1); }
+            50% { transform: translate(-20px, 30px) scale(0.95); }
+            75% { transform: translate(-50px, -15px) scale(1.05); }
         }
 
         /* ===== КАРТОЧКА ===== */
         .main-card {
             position: relative;
             z-index: 1;
-            max-width: 580px;
             width: 100%;
-            background: linear-gradient(145deg, rgba(34, 34, 34, 0.95), rgba(26, 26, 26, 0.98));
+            max-width: 420px;
+            background: linear-gradient(160deg, rgba(26, 26, 26, 0.96), rgba(13, 13, 13, 0.98));
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 48px 40px 40px;
+            padding: 32px 24px 24px;
             backdrop-filter: blur(20px);
-            box-shadow: var(--shadow);
-            text-align: center;
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(229, 57, 53, 0.06);
             transition: border-color 0.3s ease;
         }
 
         .main-card:hover {
-            border-color: rgba(229, 57, 53, 0.25);
+            border-color: rgba(229, 57, 53, 0.15);
         }
 
-        /* ===== ИКОНКА / ЛОГО ===== */
+        /* ===== ШАПКА С ИКОНКОЙ ===== */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
         .icon-wrapper {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(183, 28, 28, 0.08));
-            border-radius: 20px;
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.18), rgba(183, 28, 28, 0.08));
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(229, 57, 53, 0.25);
-            box-shadow: 0 0 40px rgba(229, 57, 53, 0.15);
-            transition: all 0.4s ease;
+            border: 1px solid rgba(229, 57, 53, 0.2);
+            box-shadow: 0 0 30px rgba(229, 57, 53, 0.12);
         }
 
         .icon-wrapper i {
-            font-size: 34px;
+            font-size: 26px;
             color: #e53935;
-            filter: drop-shadow(0 0 12px rgba(229, 57, 53, 0.4));
+            filter: drop-shadow(0 0 10px rgba(229, 57, 53, 0.3));
         }
 
-        .main-card:hover .icon-wrapper {
-            box-shadow: 0 0 60px rgba(229, 57, 53, 0.25);
-            border-color: rgba(229, 57, 53, 0.4);
+        .header-title-group {
+            flex: 1;
+            min-width: 0;
         }
 
-        /* ===== ЗАГОЛОВОК ===== */
-        .title {
-            font-size: 32px;
+        .header-title-group h1 {
+            font-size: 22px;
             font-weight: 800;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
             color: #e53935;
-            text-shadow: 0 0 30px rgba(229, 57, 53, 0.25);
-            margin-bottom: 16px;
+            text-shadow: 0 0 24px rgba(229, 57, 53, 0.2);
+            line-height: 1.2;
         }
 
-        .title i {
-            margin-right: 10px;
-            font-size: 28px;
+        .header-title-group .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-top: 2px;
+        }
+
+        .header-title-group .badge i {
+            font-size: 8px;
+            color: #e53935;
+            margin-right: 4px;
         }
 
         /* ===== ТЕКСТ ===== */
         .description {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 36px;
-            padding: 0 4px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            padding: 0 2px;
         }
 
-        .description strong {
-            color: #e53935;
-            font-weight: 600;
+        .description p {
+            margin-bottom: 12px;
+        }
+
+        .description p:last-child {
+            margin-bottom: 0;
         }
 
         .description .highlight {
@@ -185,23 +214,111 @@
             background: rgba(229, 57, 53, 0.08);
             padding: 0 10px;
             border-radius: 6px;
-            border: 1px solid rgba(229, 57, 53, 0.12);
+            border: 1px solid rgba(229, 57, 53, 0.1);
             font-weight: 500;
             color: #e57373;
+            font-size: 14px;
         }
 
         .description i {
-            margin-right: 6px;
             color: #e53935;
             opacity: 0.7;
+            margin-right: 6px;
+            width: 18px;
+            text-align: center;
+        }
+
+        .description strong {
+            color: #e53935;
+            font-weight: 600;
+        }
+
+        .description .channel-link {
+            color: #e53935;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(229, 57, 53, 0.3);
+            transition: border-color 0.2s;
+        }
+
+        .description .channel-link:hover {
+            border-color: #e53935;
+        }
+
+        /* ===== СПИСОК ССЫЛОК (из ТЗ) ===== */
+        .links-section {
+            margin: 20px 0 24px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .links-section .links-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .links-section .links-title i {
+            color: #e53935;
+            opacity: 0.5;
+            margin-right: 6px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .link-item:last-child {
+            border-bottom: none;
+        }
+
+        .link-item i {
+            color: #e53935;
+            opacity: 0.6;
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .link-item span {
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .link-item .arrow {
+            color: var(--text-muted);
+            font-size: 12px;
+            opacity: 0.4;
+        }
+
+        .link-item:hover {
+            color: #e53935;
+        }
+
+        .link-item:hover .arrow {
+            opacity: 0.8;
+            color: #e53935;
         }
 
         /* ===== КНОПКИ ===== */
         .buttons-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 4px;
         }
 
         .btn {
@@ -209,29 +326,40 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 16px 28px;
+            padding: 15px 24px;
             border: none;
             border-radius: 50px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             text-decoration: none;
             width: 100%;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #e53935, #c62828, #b71c1c);
             background-size: 200% auto;
             color: #fff;
-            box-shadow: 0 8px 28px rgba(229, 57, 53, 0.3);
+            box-shadow: 0 6px 24px rgba(229, 57, 53, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 40px rgba(229, 57, 53, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 36px rgba(229, 57, 53, 0.45);
             background-position: right center;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97) translateY(0);
         }
 
         .btn-primary i {
@@ -242,90 +370,126 @@
             background: rgba(255, 255, 255, 0.04);
             color: var(--text-secondary);
             border: 1px solid var(--border);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(4px);
         }
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(229, 57, 53, 0.3);
+            border-color: rgba(229, 57, 53, 0.25);
             color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary:active {
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .btn-secondary i {
             font-size: 16px;
             color: #e53935;
+            opacity: 0.7;
         }
 
-        /* ===== НИЖНИЙ КОЛОНТИТУЛ ===== */
-        .footer-note {
-            margin-top: 28px;
-            font-size: 13px;
-            color: var(--text-muted);
+        /* ===== ФУТЕР КАРТОЧКИ ===== */
+        .card-footer {
+            margin-top: 22px;
+            padding-top: 16px;
             border-top: 1px solid var(--border);
-            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card-footer .footer-text {
+            font-size: 12px;
+            color: var(--text-muted);
             letter-spacing: 0.3px;
         }
 
-        .footer-note i {
+        .card-footer .footer-text i {
             color: #e53935;
-            opacity: 0.5;
-            margin-right: 6px;
+            opacity: 0.4;
+            margin-right: 4px;
         }
 
-        .footer-note a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
+        .card-footer .version {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            font-weight: 500;
         }
 
-        .footer-note a:hover {
-            color: #e53935;
-        }
-
-        /* ===== АДАПТИВ ===== */
-        @media (max-width: 480px) {
+        /* ===== АДАПТИВ ДЛЯ ТЕЛЕФОНА ===== */
+        @media (max-width: 420px) {
             .main-card {
-                padding: 32px 20px 28px;
+                padding: 24px 16px 20px;
+                border-radius: 16px;
             }
-            .title {
-                font-size: 26px;
-            }
-            .title i {
-                font-size: 22px;
-            }
-            .description {
-                font-size: 15px;
-            }
-            .btn {
-                font-size: 15px;
-                padding: 14px 20px;
+            .header-title-group h1 {
+                font-size: 20px;
             }
             .icon-wrapper {
-                width: 60px;
-                height: 60px;
+                width: 44px;
+                height: 44px;
             }
             .icon-wrapper i {
-                font-size: 28px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .title {
                 font-size: 22px;
             }
             .description {
                 font-size: 14px;
             }
+            .btn {
+                font-size: 15px;
+                padding: 14px 18px;
+            }
+            .links-section {
+                padding: 12px 14px;
+            }
+            .link-item {
+                font-size: 13px;
+            }
         }
 
-        /* ===== СКРОЛЛБАР ===== */
+        @media (max-width: 360px) {
+            .main-card {
+                padding: 18px 12px 16px;
+            }
+            .header-title-group h1 {
+                font-size: 18px;
+            }
+            .description {
+                font-size: 13px;
+            }
+            .btn {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+            .card-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+
+        @media (min-height: 780px) {
+            .main-card {
+                padding: 40px 28px 28px;
+            }
+            .description {
+                font-size: 16px;
+            }
+        }
+
+        /* ===== СКРОЛЛБАР (телефонный минимализм) ===== */
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 3px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
             background: #e53935;
@@ -335,7 +499,7 @@
 </head>
 <body>
 
-    <!-- Фоновый слой (серый + красные свечения) -->
+    <!-- Фоновый слой -->
     <div class="bg-layer">
         <div class="bg-grid"></div>
         <div class="bg-glow"></div>
@@ -345,32 +509,57 @@
     <!-- Основная карточка -->
     <div class="main-card">
 
-        <!-- Иконка (без PNG) -->
-        <div class="icon-wrapper">
-            <i class="fa-solid fa-gamepad"></i>
+        <!-- Шапка: иконка + заголовок -->
+        <div class="card-header">
+            <div class="icon-wrapper">
+                <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div class="header-title-group">
+                <h1>Обновление игры</h1>
+                <span class="badge"><i class="fa-solid fa-circle"></i> временно приостановлено</span>
+            </div>
         </div>
 
-        <!-- Заголовок красным -->
-        <h1 class="title">
-            <i class="fa-solid fa-triangle-exclamation"></i> Обновление игры
-        </h1>
-
-        <!-- Текст -->
+        <!-- Текстовый блок -->
         <div class="description">
-            <i class="fa-solid fa-rotate fa-spin" style="display: inline-block;"></i>
-            В данный момент <strong>игра обновляется</strong> или обновляется инфраструктура проекта.
-            <br><br>
-            <span class="highlight"><i class="fa-regular fa-circle-exclamation"></i> Работа временно приостановлена</span>, 
-            чтобы не нарушить работу игры и всего проекта в целом.
-            <br><br>
-            <i class="fa-regular fa-bell"></i> Пожалуйста, следите за новостями в 
-            <strong style="color: #e53935;">@MrFeastChannel</strong> или прямо в боте 
-            и ожидайте доступ в игру.
+            <p>
+                <i class="fa-solid fa-rotate fa-spin" style="display: inline-block;"></i>
+                В данный момент <strong>игра обновляется</strong> или обновляется инфраструктура проекта.
+            </p>
+            <p>
+                <span class="highlight"><i class="fa-regular fa-circle-exclamation"></i> Работа приостановлена</span>, 
+                чтобы не нарушить работу игры и всего проекта в целом.
+            </p>
+            <p>
+                <i class="fa-regular fa-bell"></i> Следите за новостями в 
+                <a href="https://t.me/MrFeastChannel" class="channel-link" target="_blank">@MrFeastChannel</a> 
+                или прямо в боте и ожидайте доступ.
+            </p>
+        </div>
+
+        <!-- Блок со ссылками (из ТЗ) -->
+        <div class="links-section">
+            <div class="links-title"><i class="fa-regular fa-link"></i> Ссылки</div>
+            <a href="https://mrfeast.com/" class="link-item" target="_blank">
+                <i class="fa-regular fa-globe"></i>
+                <span>MrFeastClicker_BOT</span>
+                <span class="arrow"><i class="fa-regular fa-arrow-up-right-from-square"></i></span>
+            </a>
+            <a href="https://mrfeast.com/Drivers/DeepThink" class="link-item" target="_blank">
+                <i class="fa-regular fa-brain"></i>
+                <span>DeepThink</span>
+                <span class="arrow"><i class="fa-regular fa-arrow-up-right-from-square"></i></span>
+            </a>
+            <a href="https://mrfeast.com/Drivers/DeepThink" class="link-item" target="_blank">
+                <i class="fa-regular fa-magnifying-glass"></i>
+                <span>Search</span>
+                <span class="arrow"><i class="fa-regular fa-arrow-up-right-from-square"></i></span>
+            </a>
         </div>
 
         <!-- Кнопки -->
         <div class="buttons-group">
-            <a href="tg://resolve?domain=MrFeastChannel" class="btn btn-primary" target="_blank">
+            <a href="https://t.me/MrFeastChannel" class="btn btn-primary" target="_blank">
                 <i class="fa-brands fa-telegram"></i> Канал новостной
             </a>
             <button class="btn btn-secondary" onclick="closeMiniApp()">
@@ -378,41 +567,49 @@
             </button>
         </div>
 
-        <!-- Маленький футер -->
-        <div class="footer-note">
-            <i class="fa-regular fa-clock"></i> 
-            <span>Обновление может занять до 2–4 часов</span>
+        <!-- Футер карточки -->
+        <div class="card-footer">
+            <span class="footer-text">
+                <i class="fa-regular fa-clock"></i> обновление ~2–4 ч
+            </span>
+            <span class="version">v2.0 · Feast</span>
         </div>
     </div>
 
     <script>
         /**
          * Закрытие Mini App (Telegram WebApp)
-         * Если запущено внутри Telegram — закрывает,
-         * иначе просто показывает сообщение или пробует window.close()
          */
         function closeMiniApp() {
-            // Проверяем, доступен ли Telegram WebApp
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.close();
                 return;
             }
-
-            // Если не в Telegram — пытаемся закрыть вкладку (не всегда работает)
             try {
                 window.close();
             } catch (_) {
-                // Если закрыть нельзя — показываем подсказку
                 alert('Закрыть страницу можно только внутри Telegram Mini App.');
             }
         }
 
-        // Небольшой эффект: если навести на карточку, она чуть оживает (уже через CSS)
-        // Дополнительно: обрабатываем клавишу Escape как закрытие (опционально)
+        // Поддержка Telegram WebApp (если есть)
+        if (window.Telegram && window.Telegram.WebApp) {
+            Telegram.WebApp.expand();
+            Telegram.WebApp.enableClosingConfirmation();
+        }
+
+        // Закрытие по Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeMiniApp();
             }
+        });
+
+        // Обработка кликов по ссылкам — чтобы не закрывать приложение
+        document.querySelectorAll('.link-item, .btn-primary').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
         });
     </script>
 
