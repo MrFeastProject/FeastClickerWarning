@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обновление игры · Feast Executor</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1a1a'/%3E%3Cpath d='M50 20 L70 40 L65 45 L55 35 L55 80 L45 80 L45 35 L35 45 L30 40 L50 20Z' fill='%23e53935'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #222222;
+            --bg-card: #2a2a2a;
+            --bg-card-hover: #333333;
+            --red: #e53935;
+            --red-dark: #b71c1c;
+            --red-glow: rgba(229, 57, 53, 0.35);
+            --red-glow-strong: rgba(229, 57, 53, 0.6);
+            --text: #f0f0f0;
+            --text-secondary: #bbbbbb;
+            --text-muted: #888888;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(229, 57, 53, 0.35);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-lg: 24px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            margin: 0;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* ===== Фоновый слой ===== */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 70%);
+        }
+
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.08;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #e53935, transparent 70%);
+            top: -200px;
+            right: -150px;
+            animation: floatGlow 25s ease-in-out infinite;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.05;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #e53935, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+            animation: floatGlow 30s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -60px) scale(1.1); }
+            50% { transform: translate(-20px, 40px) scale(0.9); }
+            75% { transform: translate(-60px, -20px) scale(1.05); }
+        }
+
+        /* ===== КАРТОЧКА ===== */
+        .main-card {
+            position: relative;
+            z-index: 1;
+            max-width: 580px;
+            width: 100%;
+            background: linear-gradient(145deg, rgba(34, 34, 34, 0.95), rgba(26, 26, 26, 0.98));
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 48px 40px 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .main-card:hover {
+            border-color: rgba(229, 57, 53, 0.25);
+        }
+
+        /* ===== ИКОНКА / ЛОГО ===== */
+        .icon-wrapper {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.15), rgba(183, 28, 28, 0.08));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(229, 57, 53, 0.25);
+            box-shadow: 0 0 40px rgba(229, 57, 53, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .icon-wrapper i {
+            font-size: 34px;
+            color: #e53935;
+            filter: drop-shadow(0 0 12px rgba(229, 57, 53, 0.4));
+        }
+
+        .main-card:hover .icon-wrapper {
+            box-shadow: 0 0 60px rgba(229, 57, 53, 0.25);
+            border-color: rgba(229, 57, 53, 0.4);
+        }
+
+        /* ===== ЗАГОЛОВОК ===== */
+        .title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #e53935;
+            text-shadow: 0 0 30px rgba(229, 57, 53, 0.25);
+            margin-bottom: 16px;
+        }
+
+        .title i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        /* ===== ТЕКСТ ===== */
+        .description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 36px;
+            padding: 0 4px;
+        }
+
+        .description strong {
+            color: #e53935;
+            font-weight: 600;
+        }
+
+        .description .highlight {
+            display: inline-block;
+            background: rgba(229, 57, 53, 0.08);
+            padding: 0 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(229, 57, 53, 0.12);
+            font-weight: 500;
+            color: #e57373;
+        }
+
+        .description i {
+            margin-right: 6px;
+            color: #e53935;
+            opacity: 0.7;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .buttons-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e53935, #c62828, #b71c1c);
+            background-size: 200% auto;
+            color: #fff;
+            box-shadow: 0 8px 28px rgba(229, 57, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(229, 57, 53, 0.45);
+            background-position: right center;
+        }
+
+        .btn-primary i {
+            font-size: 18px;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(6px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(229, 57, 53, 0.3);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary i {
+            font-size: 16px;
+            color: #e53935;
+        }
+
+        /* ===== НИЖНИЙ КОЛОНТИТУЛ ===== */
+        .footer-note {
+            margin-top: 28px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-note i {
+            color: #e53935;
+            opacity: 0.5;
+            margin-right: 6px;
+        }
+
+        .footer-note a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-note a:hover {
+            color: #e53935;
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 480px) {
+            .main-card {
+                padding: 32px 20px 28px;
+            }
+            .title {
+                font-size: 26px;
+            }
+            .title i {
+                font-size: 22px;
+            }
+            .description {
+                font-size: 15px;
+            }
+            .btn {
+                font-size: 15px;
+                padding: 14px 20px;
+            }
+            .icon-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+            .icon-wrapper i {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .title {
+                font-size: 22px;
+            }
+            .description {
+                font-size: 14px;
+            }
+        }
+
+        /* ===== СКРОЛЛБАР ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e53935;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновый слой (серый + красные свечения) -->
+    <div class="bg-layer">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div class="bg-glow-2"></div>
+    </div>
+
+    <!-- Основная карточка -->
+    <div class="main-card">
+
+        <!-- Иконка (без PNG) -->
+        <div class="icon-wrapper">
+            <i class="fa-solid fa-gamepad"></i>
+        </div>
+
+        <!-- Заголовок красным -->
+        <h1 class="title">
+            <i class="fa-solid fa-triangle-exclamation"></i> Обновление игры
+        </h1>
+
+        <!-- Текст -->
+        <div class="description">
+            <i class="fa-solid fa-rotate fa-spin" style="display: inline-block;"></i>
+            В данный момент <strong>игра обновляется</strong> или обновляется инфраструктура проекта.
+            <br><br>
+            <span class="highlight"><i class="fa-regular fa-circle-exclamation"></i> Работа временно приостановлена</span>, 
+            чтобы не нарушить работу игры и всего проекта в целом.
+            <br><br>
+            <i class="fa-regular fa-bell"></i> Пожалуйста, следите за новостями в 
+            <strong style="color: #e53935;">@MrFeastChannel</strong> или прямо в боте 
+            и ожидайте доступ в игру.
+        </div>
+
+        <!-- Кнопки -->
+        <div class="buttons-group">
+            <a href="tg://resolve?domain=MrFeastChannel" class="btn btn-primary" target="_blank">
+                <i class="fa-brands fa-telegram"></i> Канал новостной
+            </a>
+            <button class="btn btn-secondary" onclick="closeMiniApp()">
+                <i class="fa-regular fa-circle-xmark"></i> Закрыть страницу
+            </button>
+        </div>
+
+        <!-- Маленький футер -->
+        <div class="footer-note">
+            <i class="fa-regular fa-clock"></i> 
+            <span>Обновление может занять до 2–4 часов</span>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Закрытие Mini App (Telegram WebApp)
+         * Если запущено внутри Telegram — закрывает,
+         * иначе просто показывает сообщение или пробует window.close()
+         */
+        function closeMiniApp() {
+            // Проверяем, доступен ли Telegram WebApp
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.close();
+                return;
+            }
+
+            // Если не в Telegram — пытаемся закрыть вкладку (не всегда работает)
+            try {
+                window.close();
+            } catch (_) {
+                // Если закрыть нельзя — показываем подсказку
+                alert('Закрыть страницу можно только внутри Telegram Mini App.');
+            }
+        }
+
+        // Небольшой эффект: если навести на карточку, она чуть оживает (уже через CSS)
+        // Дополнительно: обрабатываем клавишу Escape как закрытие (опционально)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMiniApp();
+            }
+        });
+    </script>
+
+</body>
+</html>
